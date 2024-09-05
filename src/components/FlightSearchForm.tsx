@@ -7,8 +7,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 const FlightSearchForm: React.FC = () => {
   // State management for form fields
   const [tripType, setTripType] = useState<'One Way' | 'Round Trip' | 'Multi City'>('One Way');
-  const [from, setFrom] = useState('New Delhi');
-  const [to, setTo] = useState('Mumbai');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState<Date | null>(new Date());
   const [returnDate, setReturnDate] = useState<Date | null>(null);
   const [travellers, setTravellers] = useState('1 Adult');
