@@ -1,4 +1,3 @@
-// src/components/FlightSearchForm.tsx
 import React, { useState } from 'react';
 import { FaPlaneDeparture, FaExchangeAlt, FaCalendarAlt, FaUser } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
@@ -11,8 +10,8 @@ const FlightSearchForm: React.FC = () => {
   const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState<Date | null>(new Date());
   const [returnDate, setReturnDate] = useState<Date | null>(null);
-  const [travellers, setTravellers] = useState('1 Adult');
-  const [travelClass, setTravelClass] = useState('Economy');
+  const [travellers, setTravellers] = useState('');
+  const [travelClass, setTravelClass] = useState<'Economy' | 'Business' | 'First Class'>('Economy');
   const [specialFare, setSpecialFare] = useState<'Regular' | 'Armed Forces' | 'Student' | 'Senior Citizen' | 'Doctors & Nurses'>('Regular');
 
   // Handle input changes
@@ -30,15 +29,13 @@ const FlightSearchForm: React.FC = () => {
       from,
       to,
       departureDate,
-      returnDate: tripType === 'Round Trip' ? returnDate : null,
+      returnDate,
       travellers,
       travelClass,
       specialFare,
     };
 
     console.log('Searching with details:', searchDetails);
-
-    
   };
 
   return (
@@ -47,9 +44,39 @@ const FlightSearchForm: React.FC = () => {
       <div className="bg-white bg-opacity-80 rounded-lg p-6 shadow-lg max-w-4xl mx-auto">
         {/* Tabs */}
         <div className="flex space-x-4 items-center mb-4">
-          <button onClick={() => handleTripTypeChange('One Way')} className={`py-1 px-4 rounded-full ${tripType === 'One Way' ? 'bg-black text-white' : 'text-gray-600'}`}>One Way</button>
-          <button onClick={() => handleTripTypeChange('Round Trip')} className={`py-1 px-4 rounded-full ${tripType === 'Round Trip' ? 'bg-black text-white' : 'text-gray-600'}`}>Round Trip</button>
-          <button onClick={() => handleTripTypeChange('Multi City')} className={`py-1 px-4 rounded-full ${tripType === 'Multi City' ? 'bg-black text-white' : 'text-gray-600'}`}>Multi City</button>
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="tripType"
+              value="One Way"
+              checked={tripType === 'One Way'}
+              onChange={() => handleTripTypeChange('One Way')}
+              className="mr-1"
+            />
+            <span>One Way</span>
+          </label>
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="tripType"
+              value="Round Trip"
+              checked={tripType === 'Round Trip'}
+              onChange={() => handleTripTypeChange('Round Trip')}
+              className="mr-1"
+            />
+            <span>Round Trip</span>
+          </label>
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="tripType"
+              value="Multi City"
+              checked={tripType === 'Multi City'}
+              onChange={() => handleTripTypeChange('Multi City')}
+              className="mr-1"
+            />
+            <span>Multi City</span>
+          </label>
         </div>
 
         {/* Inputs Row */}
@@ -57,7 +84,13 @@ const FlightSearchForm: React.FC = () => {
           {/* From Input */}
           <div className="relative col-span-1 md:col-span-2 flex items-center bg-white rounded-lg p-4 shadow-inner">
             <FaPlaneDeparture className="text-gray-400 mr-2" />
-            <input type="text" value={from} onChange={handleFromChange} placeholder="From" className="bg-transparent outline-none text-lg font-semibold" />
+            <input
+              type="text"
+              value={from}
+              onChange={handleFromChange}
+              placeholder="From"
+              className="bg-transparent outline-none text-lg font-semibold"
+            />
           </div>
 
           {/* Exchange Icon */}
@@ -68,7 +101,13 @@ const FlightSearchForm: React.FC = () => {
           {/* To Input */}
           <div className="relative col-span-1 md:col-span-2 flex items-center bg-white rounded-lg p-4 shadow-inner">
             <FaPlaneDeparture className="text-gray-400 mr-2" />
-            <input type="text" value={to} onChange={handleToChange} placeholder="To" className="bg-transparent outline-none text-lg font-semibold" />
+            <input
+              type="text"
+              value={to}
+              onChange={handleToChange}
+              placeholder="To"
+              className="bg-transparent outline-none text-lg font-semibold"
+            />
           </div>
 
           {/* Departure Date Picker */}
@@ -83,29 +122,55 @@ const FlightSearchForm: React.FC = () => {
             />
           </div>
 
-          {/* Return Date Picker */}
-          {tripType === 'Round Trip' && (
-            <div className="relative flex items-center bg-white rounded-lg p-4 shadow-inner">
-              <FaCalendarAlt className="text-gray-400 mr-2" />
-              <DatePicker
-                selected={returnDate}
-                onChange={(date) => setReturnDate(date)}
-                dateFormat="dd MMM yyyy"
-                className="bg-transparent outline-none text-lg font-semibold"
-                placeholderText="Return"
-              />
-            </div>
-          )}
+          {/* Return Date Picker (always shown) */}
+          <div className="relative flex items-center bg-white rounded-lg p-4 shadow-inner">
+            <FaCalendarAlt className="text-gray-400 mr-2" />
+            <DatePicker
+              selected={returnDate}
+              onChange={(date) => setReturnDate(date)}
+              dateFormat="dd MMM yyyy"
+              className="bg-transparent outline-none text-lg font-semibold"
+              placeholderText="Return"
+              disabled={tripType === 'One Way'}
+            />
+          </div>
 
           {/* Travellers and Class Input */}
-          <div className="relative flex items-center bg-white rounded-lg p-4 shadow-inner">
-            <FaUser className="text-gray-400 mr-2" />
-            <input type="text" value={travellers} onChange={handleTravellersChange} placeholder="Travellers" className="bg-transparent outline-none text-lg font-semibold" />
+          <div className="relative col-span-1 flex flex-col md:flex-row items-center justify-between bg-white rounded-lg p-4 shadow-inner space-y-4 md:space-y-0">
+            {/* Travellers Input */}
+            <div className="flex items-center">
+              <FaUser className="text-gray-400 mr-2" />
+              <input
+                type="text"
+                value={travellers}
+                onChange={handleTravellersChange}
+                placeholder="Travellers"
+                className="bg-transparent outline-none text-lg font-semibold"
+              />
+            </div>
+
+            {/* Travel Class Dropdown */}
+            <div className="flex items-center space-x-2">
+              <label htmlFor="travelClass" className="text-lg font-semibold">Class:</label>
+              <select
+                id="travelClass"
+                value={travelClass}
+                onChange={handleTravelClassChange}
+                className="bg-transparent outline-none text-lg font-semibold"
+              >
+                <option value="Economy">Economy</option>
+                <option value="Business">Business</option>
+                <option value="First Class">First Class</option>
+              </select>
+            </div>
           </div>
 
           {/* Search Button */}
           <div className="relative col-span-1 flex items-center justify-center">
-            <button onClick={handleSearch} className="bg-black text-yellow-500 py-3 px-8 rounded-full flex items-center">
+            <button
+              onClick={handleSearch}
+              className="bg-black text-yellow-500 py-3 px-8 rounded-full flex items-center"
+            >
               <FaPlaneDeparture className="mr-2" />
               <span>Search</span>
             </button>
@@ -118,7 +183,14 @@ const FlightSearchForm: React.FC = () => {
           <div className="flex items-center space-x-2">
             {['Regular', 'Armed Forces', 'Student', 'Senior Citizen', 'Doctors & Nurses'].map((fare) => (
               <label key={fare} className="flex items-center">
-                <input type="radio" name="fare" value={fare} checked={specialFare === fare} onChange={() => handleSpecialFareChange(fare as any)} className="mr-1" />
+                <input
+                  type="radio"
+                  name="fare"
+                  value={fare}
+                  checked={specialFare === fare}
+                  onChange={() => handleSpecialFareChange(fare as any)}
+                  className="mr-1"
+                />
                 {fare}
               </label>
             ))}
