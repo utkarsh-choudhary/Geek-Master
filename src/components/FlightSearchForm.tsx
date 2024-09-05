@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaPlaneDeparture, FaExchangeAlt, FaCalendarAlt, FaUser } from 'react-icons/fa';
+import { FaPlaneDeparture } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -10,7 +10,7 @@ const FlightSearchForm: React.FC = () => {
   const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState<Date | null>(new Date());
   const [returnDate, setReturnDate] = useState<Date | null>(null);
-  const [travellers, setTravellers] = useState('');
+  const [travellers, setTravellers] = useState('1 Adult');
   const [travelClass, setTravelClass] = useState<'Economy' | 'Business' | 'First Class'>('Economy');
   const [specialFare, setSpecialFare] = useState<'Regular' | 'Armed Forces' | 'Student' | 'Senior Citizen' | 'Doctors & Nurses'>('Regular');
 
@@ -19,7 +19,7 @@ const FlightSearchForm: React.FC = () => {
   const handleFromChange = (e: React.ChangeEvent<HTMLInputElement>) => setFrom(e.target.value);
   const handleToChange = (e: React.ChangeEvent<HTMLInputElement>) => setTo(e.target.value);
   const handleTravellersChange = (e: React.ChangeEvent<HTMLInputElement>) => setTravellers(e.target.value);
-  const handleTravelClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => setTravelClass(e.target.value);
+  const handleTravelClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => setTravelClass(e.target.value as 'Economy' | 'Business' | 'First Class');
   const handleSpecialFareChange = (fare: 'Regular' | 'Armed Forces' | 'Student' | 'Senior Citizen' | 'Doctors & Nurses') => setSpecialFare(fare);
 
   // Handle form submission
@@ -41,7 +41,7 @@ const FlightSearchForm: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center py-6">
       {/* Main Container */}
-      <div className="bg-white bg-opacity-80 rounded-lg p-6 shadow-lg max-w-4xl mx-auto">
+      <div className="bg-white bg-opacity-80 rounded-lg p-6 shadow-lg max-w-5xl mx-auto">
         {/* Tabs */}
         <div className="flex space-x-4 items-center mb-4">
           <label className="flex items-center space-x-2">
@@ -80,100 +80,84 @@ const FlightSearchForm: React.FC = () => {
         </div>
 
         {/* Inputs Row */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
           {/* From Input */}
-          <div className="relative col-span-1 md:col-span-2 flex items-center bg-white rounded-lg p-4 shadow-inner">
-            <FaPlaneDeparture className="text-gray-400 mr-2" />
+          <div className="relative col-span-1 flex flex-col bg-white rounded-lg p-4 shadow-inner">
+            <label className="font-semibold mb-1">From</label>
             <input
               type="text"
               value={from}
               onChange={handleFromChange}
               placeholder="From"
-              className="bg-transparent outline-none text-lg font-semibold"
+              className="bg-transparent outline-none text-lg"
             />
           </div>
 
-          {/* Exchange Icon */}
-          <div className="flex justify-center items-center">
-            <FaExchangeAlt className="text-gray-400" />
-          </div>
-
           {/* To Input */}
-          <div className="relative col-span-1 md:col-span-2 flex items-center bg-white rounded-lg p-4 shadow-inner">
-            <FaPlaneDeparture className="text-gray-400 mr-2" />
+          <div className="relative col-span-1 flex flex-col bg-white rounded-lg p-4 shadow-inner">
+            <label className="font-semibold mb-1">To</label>
             <input
               type="text"
               value={to}
               onChange={handleToChange}
               placeholder="To"
-              className="bg-transparent outline-none text-lg font-semibold"
+              className="bg-transparent outline-none text-lg"
             />
           </div>
 
           {/* Departure Date Picker */}
-          <div className="relative flex items-center bg-white rounded-lg p-4 shadow-inner">
-            <FaCalendarAlt className="text-gray-400 mr-2" />
+          <div className="relative flex flex-col bg-white rounded-lg p-4 shadow-inner">
+            <label className="font-semibold mb-1">Departure</label>
             <DatePicker
               selected={departureDate}
               onChange={(date) => setDepartureDate(date)}
               dateFormat="dd MMM yyyy"
-              className="bg-transparent outline-none text-lg font-semibold"
-              placeholderText="Departure"
+              className="bg-transparent outline-none text-lg"
+              placeholderText="mm/dd/yyyy"
             />
           </div>
 
-          {/* Return Date Picker (always shown) */}
-          <div className="relative flex items-center bg-white rounded-lg p-4 shadow-inner">
-            <FaCalendarAlt className="text-gray-400 mr-2" />
+          {/* Return Date Picker */}
+          <div className="relative flex flex-col bg-white rounded-lg p-4 shadow-inner">
+            <label className="font-semibold mb-1">Return</label>
             <DatePicker
               selected={returnDate}
               onChange={(date) => setReturnDate(date)}
               dateFormat="dd MMM yyyy"
-              className="bg-transparent outline-none text-lg font-semibold"
-              placeholderText="Return"
+              className="bg-transparent outline-none text-lg"
+              placeholderText="Add Return Trip"
               disabled={tripType === 'One Way'}
             />
           </div>
 
-          {/* Travellers and Class Input */}
-          <div className="relative col-span-1 flex flex-col md:flex-row items-center justify-between bg-white rounded-lg p-4 shadow-inner space-y-4 md:space-y-0">
+          {/* Travellers and Class in the Same Section */}
+          <div className="relative flex flex-col md:flex-row bg-white rounded-lg p-4 shadow-inner col-span-2">
             {/* Travellers Input */}
-            <div className="flex items-center">
-              <FaUser className="text-gray-400 mr-2" />
+            <div className="flex flex-col md:w-1/2 md:pr-2">
+              <label className="font-semibold mb-1">Travellers</label>
               <input
                 type="text"
                 value={travellers}
                 onChange={handleTravellersChange}
                 placeholder="Travellers"
-                className="bg-transparent outline-none text-lg font-semibold"
+                className="bg-transparent outline-none text-lg"
               />
             </div>
 
             {/* Travel Class Dropdown */}
-            <div className="flex items-center space-x-2">
-              <label htmlFor="travelClass" className="text-lg font-semibold">Class:</label>
+            <div className="flex flex-col md:w-1/2 md:pl-2 mt-4 md:mt-0">
+              <label className="font-semibold mb-1">Class</label>
               <select
                 id="travelClass"
                 value={travelClass}
                 onChange={handleTravelClassChange}
-                className="bg-transparent outline-none text-lg font-semibold"
+                className="bg-transparent outline-none text-lg"
               >
                 <option value="Economy">Economy</option>
                 <option value="Business">Business</option>
                 <option value="First Class">First Class</option>
               </select>
             </div>
-          </div>
-
-          {/* Search Button */}
-          <div className="relative col-span-1 flex items-center justify-center">
-            <button
-              onClick={handleSearch}
-              className="bg-black text-yellow-500 py-3 px-8 rounded-full flex items-center"
-            >
-              <FaPlaneDeparture className="mr-2" />
-              <span>Search</span>
-            </button>
           </div>
         </div>
 
@@ -195,6 +179,17 @@ const FlightSearchForm: React.FC = () => {
               </label>
             ))}
           </div>
+        </div>
+
+        {/* Search Button positioned after Special Fares and to the right */}
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={handleSearch}
+            className="bg-black text-yellow-500 py-3 px-8 rounded-full flex items-center"
+          >
+            <FaPlaneDeparture className="mr-2" />
+            <span>Search</span>
+          </button>
         </div>
       </div>
     </div>

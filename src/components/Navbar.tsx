@@ -45,8 +45,8 @@ const Navbar: React.FC = () => {
             <Image
               src="/path-to-profile-image.jpg" 
               alt="User Image"
-              width={30}
-              height={30}
+              width={20}
+              height={20}
               className="rounded-full"
             />
             <span className="text-black">Utkarsh</span>
