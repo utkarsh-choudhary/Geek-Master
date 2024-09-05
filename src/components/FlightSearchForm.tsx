@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const FlightSearchForm: React.FC = () => {
-  // State management for form fields
+  
   const [tripType, setTripType] = useState<'One Way' | 'Round Trip' | 'Multi City'>('One Way');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -14,7 +14,7 @@ const FlightSearchForm: React.FC = () => {
   const [travelClass, setTravelClass] = useState<'Economy' | 'Business' | 'First Class'>('Economy');
   const [specialFare, setSpecialFare] = useState<'Regular' | 'Armed Forces' | 'Student' | 'Senior Citizen' | 'Doctors & Nurses'>('Regular');
 
-  // Handle input changes
+  
   const handleTripTypeChange = (type: 'One Way' | 'Round Trip' | 'Multi City') => setTripType(type);
   const handleFromChange = (e: React.ChangeEvent<HTMLInputElement>) => setFrom(e.target.value);
   const handleToChange = (e: React.ChangeEvent<HTMLInputElement>) => setTo(e.target.value);
