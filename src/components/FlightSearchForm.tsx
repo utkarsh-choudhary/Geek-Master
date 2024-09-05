@@ -38,7 +38,7 @@ const FlightSearchForm: React.FC = () => {
 
     console.log('Searching with details:', searchDetails);
 
-    // Add your search logic here (e.g., API call)
+    
   };
 
   return (
