@@ -230,6 +230,25 @@ const FlightSearchForm: React.FC = () => {
           </div>
         </div>
 
+        {/* Special Fares Section */}
+<div className="relative flex flex-col md:flex-row bg-transparent rounded-lg p-4 shadow-inner col-span-2">
+  <label className="font-semibold mb-1 md:w-1/6">Special Fares</label>
+  <div className="flex flex-wrap md:flex-nowrap md:w-5/6">
+    {['Regular', 'Armed Forces', 'Student', 'Senior Citizen', 'Doctors & Nurses'].map((fare) => (
+      <label key={fare} className="flex items-center mr-4 mb-2 md:mb-0">
+        <input
+          type="radio"
+          value={fare}
+          checked={specialFare === fare}
+          onChange={() => setSpecialFare(fare as any)}
+          className="mr-1"
+        />
+        <span>{fare}</span>
+      </label>
+    ))}
+  </div>
+</div>
+
         <div className="flex justify-end mt-4">
           <button
             onClick={handleSearch}
